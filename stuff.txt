@@ -1,0 +1,14 @@
+C:\xampp\apache\conf\extra
+httpd-vhosts.conf
+
+<VirtualHost *:80>
+    DocumentRoot "C:/xampp/htdocs/twitter_clone/public"
+    ServerName mytwitter.local
+</VirtualHost>
+
+
+
+C:\Windows\System32\drivers\etc
+hosts
+
+127.0.0.1       mytwitter.local
