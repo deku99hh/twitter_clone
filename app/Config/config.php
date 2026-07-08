@@ -1,7 +1,7 @@
 <?php 
 
 // define pase url for the project 
-define("BURL","http://mymvc.local/");
+define("BURL","http://mytwitter.local/");
 
 
 /**
@@ -11,7 +11,7 @@ define("BURL","http://mymvc.local/");
 define("DB_HOST","localhost");
 define("DB_USER","root");
 define("DB_PASS","");
-define("DB_NAME","myfirstdb");
+define("DB_NAME","mytwitter_clone_db");
 
 
 

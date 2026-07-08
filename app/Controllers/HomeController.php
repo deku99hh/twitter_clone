@@ -9,7 +9,7 @@ class HomeController{
         // echo '<br>';
         // echo 'class ' . __CLASS__ . ' method ' . __METHOD__ ;
 
-        $data['title'] = 'homepassssssssssssssssssssssssssssssssssssssssssssssssssssssge';
+        $data['title'] = 'homepage';
         View::load('home',$data);
     }
 }
