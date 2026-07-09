@@ -7,6 +7,7 @@ CREATE TABLE users(
     id INT(11) NOT NULL AUTO_INCREMENT,
     email varchar(100) NOT NULL,
     username varchar(30) NOT NULL,
+    name varchar(30) NOT NULL,
     pwd varchar(255) NOT NULL,
     created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     verified BOOLEAN DEFAULT FALSE NOT NULL,
@@ -143,3 +144,4 @@ CREATE TABLE notification(
 
 
 
+INSERT INTO users (email, username, name, pwd, verified) VALUES('A@gmail.com', 'A', 'mr. A', '123', false);
