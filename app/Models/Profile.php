@@ -1,6 +1,6 @@
 <?php
 
-class Profile{
+class profile{
 
     private $table = "about";
     private $pdo;
