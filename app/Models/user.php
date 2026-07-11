@@ -61,7 +61,7 @@ class user{
     public function get_user_data($username)
     {
 
-        $query = "SELECT username, email, verified, name FROM users WHERE username = :username;";
+        $query = "SELECT username, email, verified, name, id FROM users WHERE username = :username;";
         $stmt = $this->pdo->prepare($query);
         $stmt->bindParam(":username", $username);
         $stmt->execute();

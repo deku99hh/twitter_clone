@@ -16,11 +16,11 @@ class AuthorisationMiddleware{
     }
 
 
-    public static function check_for_POST(){
+    public static function check_for_POST($place){
         if ($_SERVER['REQUEST_METHOD'] === "POST") {
             
         } else {
-            header("location: " . BURL . "login");
+            header("location: " . BURL . $place);
         }
     }
 }

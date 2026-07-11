@@ -18,7 +18,7 @@ class SignupController{
         // echo "fsdfsddddddddddddddddd";
         // $data['title'] = "dfsdfsfsfd";
 
-        AuthorisationMiddleware::check_for_POST();
+        AuthorisationMiddleware::check_for_POST("signup");
         $username = $_POST["username"];
         $pwd = $_POST["pwd"];
         $email = $_POST["email"];
@@ -67,6 +67,7 @@ class SignupController{
             
             $user_data = $db->get_user_data($username);
             $_SESSION['user_info'] = [
+                'id' => $user_data['id'],
                 'username' => $user_data['username'],
                 'email' => $user_data['email'],
                 'verified' => $user_data['verified'],

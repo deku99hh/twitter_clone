@@ -22,7 +22,7 @@ require_once(CONFIG.'config.php');
 
 
 // autoload all classes 
-$modules = [ROOT_PATH,APP,CORE,VIEWS,CONTROLLERS,MODELS,CONFIG,Middleware,Validation];
+$modules = [ROOT_PATH,APP,CORE,CONTROLLERS,MODELS,CONFIG,Middleware,Validation];
 set_include_path(get_include_path(). PATH_SEPARATOR.implode(PATH_SEPARATOR,$modules));
 spl_autoload_register('spl_autoload');
 

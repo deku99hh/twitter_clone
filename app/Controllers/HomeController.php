@@ -9,7 +9,18 @@ class HomeController{
         // echo '<br>';
         // echo 'class ' . __CLASS__ . ' method ' . __METHOD__ ;
 
-        $data['title'] = 'homepage';
+        $posts_model = new posts();
+        $posts = $posts_model->get_posts();
+
+        $data = ['posts'=>$posts,];
+
+        // print_r($posts);
         View::load('home',$data);
+    }
+
+    public function post()
+    {
+        AuthorisationMiddleware::check_for_POST("");
+
     }
 }
