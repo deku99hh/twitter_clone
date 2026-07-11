@@ -14,13 +14,13 @@
 // $_SESSION['user_info'] = [1,2,1];
 
 if (isset($_SESSION['user_info'])) {
-    echo '<p class="">' . $_SESSION['user_info']['username'] . '</p>';
+    echo '<p class=""> hello ' . $_SESSION['user_info']['name'] . '! </p>';
 }
 ?>
 
 <?php if (isset($_SESSION['user_info'])) { ?>
 
-    <form action= <?php echo BURL . "home/post" ?> method="POST">
+    <form action= <?php echo BURL . "Post/post" ?> method="POST">
         <input type="text" name="post_text">        
         <input type="submit">  
     </form>
@@ -43,6 +43,15 @@ if (isset($_SESSION['user_info'])) {
         <h2> <?php echo $post['username'] ?> </h2>
         <h3> <?php echo $post['post_text'] ?> </h3>
         <h3> <?php echo $post['created_at'] ?> </h3>
+        <a href= <?php echo BURL . "Post/open_post/" . $post['id'] ?>>view comments</a>
+
+<?php if (isset($_SESSION['user_info'])) { ?>
+
+        <a href= <?php echo BURL . "Post/comment/" . $post['id'] ?>>comment</a>
+        <a href=<?php echo BURL . "Post/like/" . $post['id'] ?>><button>like</button></a> <samp> <?php echo $post['total_likes'] ?> </samp>
+
+<?php }?>
+
         <hr>
     </div>
 <?php } ?>
