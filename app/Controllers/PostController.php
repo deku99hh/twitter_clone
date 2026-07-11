@@ -62,6 +62,11 @@ class PostController{
             'post_data' => $post_data,
             'commentsarr' => $commentsarr
         ];
+
+        foreach ($data['post_data'] as &$post) {
+            $post['post_text'] = helpers::formatPostText($post['post_text']);
+        }
+
         View::load('post', $data);
 
     }
@@ -76,6 +81,22 @@ class PostController{
         echo "<script>window.history.back();</script>";
     }
 
+    public function search($key_words)
+    {
+        $posts_model = new posts();
+        $posts = $posts_model->search($key_words);
+
+        $data = ['posts'=>$posts,];
+
+        // print_r($posts);
+        foreach ($data['posts'] as &$post) {
+            $post['post_text'] = helpers::formatPostText($post['post_text']);
+        }
+
+
+        View::load('search',$data);
+
+    }
 
 
 

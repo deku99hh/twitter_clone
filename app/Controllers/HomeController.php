@@ -14,7 +14,11 @@ class HomeController{
 
         $data = ['posts'=>$posts,];
 
-        // print_r($posts);
+        foreach ($data['posts'] as &$post) {
+            $post['post_text'] = helpers::formatPostText($post['post_text']);
+        }
+        // print_r($data);
+
         View::load('home',$data);
     }
 
@@ -30,8 +34,13 @@ class HomeController{
         $posts_model = new posts();
         $posts = $posts_model->get_posts_by_follows($my_id);
 
+        
         $data = ['posts'=>$posts,];
-
+        
+        foreach ($data['posts'] as &$post) {
+            $post['post_text'] = helpers::formatPostText($post['post_text']);
+        }
+        
         // print_r($posts);
         View::load('home',$data);
     }

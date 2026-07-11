@@ -188,7 +188,37 @@ class posts{
 
     }
 
+    public function search($key_words)
+    {
+        $query = "SELECT users.id, users.username, users.name, users.verified ,posts.post_text, posts.created_at, posts.id, COUNT(likes.post_id) AS total_likes
+            FROM users
+            INNER JOIN posts ON users.id = posts.author
+            LEFT JOIN likes ON likes.post_id = posts.id
+            WHERE posts.post_text LIKE :key_words
+            GROUP BY 
+                users.id, 
+                users.username, 
+                users.name, 
+                users.verified, 
+                posts.id, 
+                posts.post_text, 
+                posts.created_at;
+            ";
+        $key_words = "%" . $key_words . "%";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->bindParam(":key_words", $key_words);
+        $stmt->execute();
 
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // echo count($result);
+        // echo '<br>';
+        // echo '<br>';
+        // echo '<br>';
+        // echo '<br>';
+        return $result;
+
+    }
 
 
 

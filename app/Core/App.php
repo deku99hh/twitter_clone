@@ -27,6 +27,8 @@ class App{
             $this->params = !empty($url) ? array_values($url) : [];
         }
 
+// print_r($this->params);
+
         // var_dump($url);
         // echo $this->controller;
         // echo "<br>";
