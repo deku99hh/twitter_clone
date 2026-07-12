@@ -12,10 +12,24 @@ class posts{
 
     public function get_posts()
     {
-        $query = "SELECT users.id, users.username, users.name, users.verified ,posts.post_text, posts.created_at, posts.id, COUNT(likes.post_id) AS total_likes
+        $query = "SELECT 
+                users.id, 
+                users.username, 
+                users.name, 
+                users.verified,
+                posts.id , 
+                posts.post_text, 
+                posts.created_at, 
+                COUNT(DISTINCT likes.id) AS total_likes, 
+                
+                IF(stars.user IS NOT NULL, 1, 0) AS is_starred
+
             FROM users
             INNER JOIN posts ON users.id = posts.author
             LEFT JOIN likes ON likes.post_id = posts.id
+
+            LEFT JOIN stars ON stars.post_id = posts.id AND stars.user = :current_user_id
+
             GROUP BY 
                 users.id, 
                 users.username, 
@@ -23,10 +37,14 @@ class posts{
                 users.verified, 
                 posts.id, 
                 posts.post_text, 
-                posts.created_at;
+                posts.created_at,
+                stars.user;
+
             ";
                   
         $stmt = $this->pdo->prepare($query);
+        $stmt->bindParam(":current_user_id", $_SESSION['user_info']['id']);
+
         $stmt->execute();
 
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -43,27 +61,39 @@ class posts{
     public function get_posts_by_follows($my_id)
     {
         $query = "SELECT 
-                    users.id,
-                    users.username, 
-                    users.name, 
-                    users.verified, 
-                    posts.post_text, 
-                    posts.created_at, 
-                    posts.id,
-                    COUNT(likes.post_id) AS total_likes
-                FROM users
-                INNER JOIN posts ON users.id = posts.author
-                INNER JOIN follows ON follows.user_who_is_followed = users.id
-                LEFT JOIN likes ON likes.post_id = posts.id
-                WHERE follows.user_who_follow = :my_id
-                GROUP BY 
-                    users.id, 
-                    users.username, 
-                    users.name, 
-                    users.verified, 
-                    posts.id, 
-                    posts.post_text, 
-                    posts.created_at;
+    users.id ,
+    users.username, 
+    users.name, 
+    users.verified, 
+    posts.id , 
+    posts.post_text, 
+    posts.created_at, 
+    
+    COALESCE(COUNT(DISTINCT likes.id), 0) AS total_likes, 
+    
+    MAX(IF(likes.user = :my_id , 1, 0)) AS is_liked, 
+    
+    IF(stars.user IS NOT NULL, 1, 0) AS is_starred
+
+FROM users
+INNER JOIN posts ON users.id = posts.author
+INNER JOIN follows ON follows.user_who_is_followed = users.id
+
+LEFT JOIN likes ON likes.post_id = posts.id
+LEFT JOIN stars ON stars.post_id = posts.id AND stars.user = :my_id
+
+WHERE follows.user_who_follow = :my_id
+
+GROUP BY 
+    users.id, 
+    users.username, 
+    users.name, 
+    users.verified, 
+    posts.id, 
+    posts.post_text, 
+    posts.created_at,
+    stars.user;
+
                 ";
                   
         $stmt = $this->pdo->prepare($query);

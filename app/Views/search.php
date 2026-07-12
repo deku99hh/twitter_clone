@@ -35,6 +35,7 @@ if (isset($_SESSION['user_info'])) {
 
         <a href= <?php echo BURL . "Post/comment/" . $post['id'] ?>>comment</a>
         <a href=<?php echo BURL . "Post/like/" . $post['id'] ?>><button>like</button></a> <samp> <?php echo $post['total_likes'] ?> </samp>
+        <a href=<?php echo BURL . "stars/add/" . $post['id'] ?>><button>stars</button></a> <span> <?php echo $post['is_starred'] ?> </span>
 
 <?php }?>
 
