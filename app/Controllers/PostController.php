@@ -18,6 +18,8 @@ class PostController{
 
         $posts_model->new_post($post_dsta);
 
+        NotificationsController::notificate_followers_for_post($_SESSION['user_info']['id']);
+        
         header("Refresh:0");
             
     }
@@ -63,9 +65,7 @@ class PostController{
             'commentsarr' => $commentsarr
         ];
 
-        foreach ($data['post_data'] as &$post) {
-            $post['post_text'] = helpers::formatPostText($post['post_text']);
-        }
+        $data['post_data']['post_text'] = helpers::formatPostText($data['post_data']['post_text']);
 
         View::load('post', $data);
 
@@ -94,11 +94,15 @@ class PostController{
         }
 
 
-        View::load('search',$data);
+        View::load('search', $data);
 
     }
 
-
+    // public function get_author_id($id)
+    // {
+    //     $posts_model = new posts();
+    //     $posts_model->get_author_id($id);
+    // }
 
 
 

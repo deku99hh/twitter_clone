@@ -2,7 +2,7 @@
 
 class posts{
 
-    private $table = "follows";
+    private $table = "posts";
     private $pdo;
 
     public function __construct(){
@@ -165,6 +165,7 @@ GROUP BY
         $stmt->bindParam(":post", $comment_data['post']);
         $stmt->execute();
 
+        NotificationsController::notificate_author_for_comments($comment_data['post']);
     }
 
     public function get_comments($id)
@@ -206,6 +207,9 @@ GROUP BY
             $stmt->bindParam(":post_id", $post_id);
             $stmt->bindParam(":user", $user);
             $stmt->execute();
+
+            NotificationsController::notificate_author_for_like($post_id);
+
         } else {
             $query = "DELETE FROM likes WHERE user= :user AND post_id = :post_id;";
             $stmt = $this->pdo->prepare($query);
@@ -220,23 +224,36 @@ GROUP BY
 
     public function search($key_words)
     {
-        $query = "SELECT users.id, users.username, users.name, users.verified ,posts.post_text, posts.created_at, posts.id, COUNT(likes.post_id) AS total_likes
-            FROM users
-            INNER JOIN posts ON users.id = posts.author
-            LEFT JOIN likes ON likes.post_id = posts.id
-            WHERE posts.post_text LIKE :key_words
-            GROUP BY 
-                users.id, 
-                users.username, 
-                users.name, 
-                users.verified, 
-                posts.id, 
-                posts.post_text, 
-                posts.created_at;
+        $query = "SELECT 
+                    users.id, 
+                    users.username, 
+                    users.name, 
+                    users.verified,
+                    posts.id, 
+                    posts.post_text, 
+                    posts.created_at, 
+                    COUNT(DISTINCT likes.id) AS total_likes, 
+                    IF(stars.user IS NOT NULL, 1, 0) AS is_starred
+                FROM users
+                INNER JOIN posts ON users.id = posts.author
+                LEFT JOIN likes ON likes.post_id = posts.id
+                LEFT JOIN stars ON stars.post_id = posts.id AND stars.user = :current_user_id
+                WHERE posts.post_text LIKE :key_words
+                GROUP BY 
+                    users.id, 
+                    users.username, 
+                    users.name, 
+                    users.verified, 
+                    posts.id, 
+                    posts.post_text, 
+                    posts.created_at,
+                    stars.user;
             ";
         $key_words = "%" . $key_words . "%";
         $stmt = $this->pdo->prepare($query);
         $stmt->bindParam(":key_words", $key_words);
+        $stmt->bindParam(":current_user_id", $_SESSION['user_info']['id']);
+
         $stmt->execute();
 
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -250,7 +267,19 @@ GROUP BY
 
     }
 
+    public function get_author_id($post_id)
+    {
+        $query = "SELECT AUTHOR FROM posts WHERE id = :post_id";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->bindParam(":post_id", $post_id);
+        $stmt->execute();
 
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        print_r($result);
+        return $result;
+
+    }
 
 
 }

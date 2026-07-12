@@ -1,43 +1,38 @@
-
-
-<body>
-    
 <?php
-// $_SESSION['user_info'] = [1,2,1];
+/*
+// echo '<br>';echo '<br>';echo '<br>';
+// print_r($my_notification);
 
-if (isset($_SESSION['user_info'])) {
-    echo '<p class=""> hello ' . $_SESSION['user_info']['name'] . '! </p>';
-}
-?>
+foreach ($my_notification as $notification) { ?>
 
-<!-- <?php print_r ($posts) ?> -->
+<a href= <?php echo BURL . 'Post/open_post/' . $notification['post'] ?> >
+    <?php echo $notification['notification_text'] ?>
+</a>
 
+<?php } */?>
 
+<?php require_once(VIEWS.'inc/head.php') ?>
+<?php require_once(VIEWS.'inc/header.php') ?>
 
-<?php foreach ($posts as $post) {?>
-    <div>
-        <hr>
-        <h1> <?php echo $post['name'] ?> </h1>
-        <h2> <?php echo $post['username'] ?> </h2>
-        <h3> <?php echo $post['post_text'] ?> </h3>
-        <h3> <?php echo $post['created_at'] ?> </h3>
-        <a href= <?php echo BURL . "Post/open_post/" . $post['id'] ?>>view comments</a>
-
-<?php if (isset($_SESSION['user_info'])) { ?>
-
-        <a href= <?php echo BURL . "Post/comment/" . $post['id'] ?>>comment</a>
-        <a href=<?php echo BURL . "Post/like/" . $post['id'] ?>><button>like</button></a> <samp> <?php echo $post['total_likes'] ?> </samp>
-        <a href=<?php echo BURL . "stars/add/" . $post['id'] ?>><button>stars</button></a> <span> <?php echo $post['is_starred'] ?> </span>
-
-<?php }?>
-
-        <hr>
+<div class="container my-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h4 class="mb-3">Notifications</h4>
+            
+            <?php if (empty($my_notification)): ?>
+                <div class="alert alert-info">No new notifications.</div>
+            <?php else: ?>
+                <div class="list-group shadow-sm">
+                    <?php foreach ($my_notification as $notification): ?>
+                        <a href="<?php echo BURL . 'Post/open_post/' . $notification['post']; ?>" 
+                           class="list-group-item list-group-item-action p-3">
+                            <div class="d-flex w-100 justify-content-between">
+                                <p class="mb-1"><?php echo htmlspecialchars($notification['notification_text']); ?></p>
+                            </div>
+                        </a>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </div>
     </div>
-<?php } ?>
-
-
-
-
-
-</body>
-</html>
+</div>

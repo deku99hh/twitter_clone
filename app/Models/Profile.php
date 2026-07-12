@@ -2,7 +2,7 @@
 
 class profile{
 
-    private $table = "about";
+    private $table = "profile";
     private $pdo;
 
     public function __construct(){
